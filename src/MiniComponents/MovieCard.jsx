@@ -1,38 +1,56 @@
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+//My imports
 import Modal from "./Modal";
 import ModalContent from "./ModalContent";
-// import { useNavigate } from "react-router-dom";
+import Button from "../ui/Button";
+
+//The imports for the icons
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { AiOutlineStar } from "react-icons/ai";
 
+//various styles used in tailwind and their meaning
+let styles = {
+  movieCard:
+    "relative text-white bg-[#1B263B] w-[300px] h-[500px] sm:w-[255px] sm:h-[545px] p-1 m-1 slide",
+  sideButtons: "absolute top-0 left-0 z-2",
+  imageCover: "h-[320px] sm:h-[355px] hover:brightness-50",
+  watchNow:
+    "rounded-sm mx-auto my-2 w-60 h-12 bg-[#D9D9D9] text-[#415A77] text-2xl",
+};
+
+//The components
 const MovieCard = forwardRef(function MovieCard(props, ref) {
-  const { name, score, image, id, style, hook, summary } = props;
-  const [hok, setHook] = hook;
+  //The various props obtained
+
+  const { name, score, image, id, style } = props;
+  //Getting the hoo to change the global context
+  //Why not set a function that can be called in from any where to change the context
+
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <figure
-      ref={ref}
-      style={style}
-      className="relative text-white bg-[#1B263B] w-[300px] h-[500px] sm:w-[255px] sm:h-[545px] p-1 m-1 slide"
-    >
+    <figure ref={ref} style={style} className={styles.movieCard}>
       <div
-        className="absolute top-0 left-0 z-10"
+        className={styles.sideButtons}
         onClick={() => {
           setHook([...hok, props]);
         }}
       >
         <MdOutlineBookmarkAdd size={50} />
       </div>
-      <a href={`details/${id}`}>
+
+      <Link href={`details/${id}`}>
         <div className="overflow-hidden">
           <img
-            className="h-[320px] sm:h-[355px] hover:brightness-50"
+            className={styles.imageCover}
             src={image?.original ?? <p>No</p>}
             alt=""
           />
         </div>
-      </a>
+      </Link>
+
       <figcaption>
         <div className="flex flex-col">
           <div className="flex items-center">
@@ -42,21 +60,21 @@ const MovieCard = forwardRef(function MovieCard(props, ref) {
           </div>
           <span className="text-3xl">{name}</span>
         </div>
-        <button className="rounded-sm mx-auto my-2 w-60 h-12 bg-[#D9D9D9] text-[#415A77] text-2xl">
-          Watch Now
-        </button>
+
+        <Button text={"Watch Now"} className={styles.watchNow} />
+
         <div className="flex justify-around">
-          <button className="w-20 rounded-md h-8">Trailer</button>
-          <button
+          <Button text={"Trailer"} size={"sm"} />
+          <Button
+            text={"Info"}
+            size={"sm"}
             onClick={() => {
               setShowModal(true);
             }}
-            className="h-8"
-          >
-            Info
-          </button>
+          />
         </div>
       </figcaption>
+
       {showModal ? (
         <Modal>
           <ModalContent props={props} change={setShowModal} />

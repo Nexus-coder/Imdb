@@ -1,19 +1,25 @@
 import { useContext } from "react";
-import MovieWatchListContext from "../MovieWatchListContext";
+
+import { MovieWatchListContext } from "../MovieWatchListContext";
 import Navbar from "../components/Navbar";
+
 function WatchList() {
-  const [props, _] = useContext(MovieWatchListContext);
-  console.log("My Movie watchlist is ", props);
+  //Get the watchlist from the global context
+  const ctx = useContext(MovieWatchListContext);
+
+  console.log("My Movie watchlist is ", ctx.watchListed);
 
   return (
     <>
       <Navbar />
       <div className="flex">
-        {props.map((prop, index) => (
+        {ctx.watchListed.map((prop, index) => (
           <figure
             key={index}
             className="relative text-white bg-[#1B263B] w-[300px] h-[500px] sm:w-[255px] sm:h-[545px] p-1 m-1 slide"
           >
+  
+
             <a href={`details/${prop.id}`}>
               <div className="overflow-hidden">
                 <img

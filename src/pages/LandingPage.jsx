@@ -1,17 +1,26 @@
+//Inbuilt modules
+import { useContext } from "react";
+
+//My imports
 import Navbar from "../components/Navbar";
 import Results from "../components/Results";
-import { useQuery } from "@tanstack/react-query";
 import MovieCardFetch from "../fetch/MovieCardFetch";
 import ErrorBoundary from "../ErrorBoundary";
-import { useContext } from "react";
-import MovieWatchListContext from "../MovieWatchListContext";
+
+//#rd Party Modules
+import { useQuery } from "@tanstack/react-query";
 import { FaSpinner } from "react-icons/fa";
 
+//This is the main page of the application
 function LandingPage() {
-  const MovieHook = useContext(MovieWatchListContext);
 
   let query = "dad";
+
+  //Get the results of the movies and the query is initially set to dad
+  //The Details key which is the first item in the array is the name under which the result is cached
   const res = useQuery(["Details", query], MovieCardFetch);
+
+  //Get the loading state from res
   if (res.isLoading) {
     return (
       <div className="animate-spin">
@@ -19,12 +28,11 @@ function LandingPage() {
       </div>
     );
   }
-  // console.log(res.data)
+
   return (
     <div className="bg-slate-950">
       <Navbar />
-      <Results heading={"Featured today"} props={res.data} hook={MovieHook} />
-      <Results heading={"Featured today"} props={res.data} hook={MovieHook} />
+      <Results heading={"Featured today"} props={res.data}/>
     </div>
   );
 }
